@@ -6,7 +6,6 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    String some_not_needed_var = 'var';
     return new MaterialApp(
       title: 'Flutter CI',
       theme: new ThemeData(
@@ -25,7 +24,6 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
