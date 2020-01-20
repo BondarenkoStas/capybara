@@ -1,0 +1,10 @@
+workflows:
+  default-workflow:
+    name: Default Workflow
+    scripts:
+      - echo "some echo"
+      - |
+        echo "another echo"
+        cd nonexistingdirectory
+        echo "echo shouldn't output"
+      - echo "another command"
