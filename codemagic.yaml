@@ -1,0 +1,47 @@
+workflows:
+  default-workflow:
+    name: Default Workflow
+    scripts:
+      - echo "some echo"
+      - |
+        echo "another echo"
+        cd nonexistingdirectory
+        echo "echo shouldn't output"
+      - echo "another command"
+# Automatically generated on 2020-04-29 UTC from https://staging.codemagic.io/app/5c80df6467038200016d45e8/settings
+# Note that this configuration is not an exact match to UI settings. Review and adjust as necessary.
+
+workflows:
+  default-workflow:
+    name: Default Workflow
+    environment:
+      flutter: stable
+      xcode: latest
+      cocoapods: default
+    triggering:
+      events:
+        - push
+      branch_patterns:
+        - pattern: 'master'
+          include: true
+          source: true
+    scripts:
+      - |
+        # set up debug keystore
+        rm -f ~/.android/debug.keystore
+        keytool -genkeypair \
+          -alias androiddebugkey \
+          -keypass android \
+          -keystore ~/.android/debug.keystore \
+          -storepass android \
+          -dname 'CN=Android Debug,O=Android,C=US' \
+          -keyalg 'RSA' \
+          -keysize 2048 \
+          -validity 10000
+      - |
+        # set up local properties
+        echo "flutter.sdk=$HOME/programs/flutter" > "$FCI_BUILD_DIR/capybara1/android/local.properties"
+      - cd capybara1 && flutter packages pub get
+      - cd capybara1 && flutter build appbundle --debug
+    artifacts:
+      - capybara1/build/**/outputs/**/*.aab
