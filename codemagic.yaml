@@ -13,10 +13,11 @@ workflows:
         - pattern: 'with_drive_tests_safari'
           include: true
           source: true
-    scripts:
+    scripts: 
       - flutter packages pub get
-      - |
-        sudo safaridriver --enable
-        safaridriver --port 4444 &
-      - flutter config --enable-web
-      - flutter drive --target=test_driver/button_pressing.dart --browser-name safari --release
+      - name: 'Flutter drive web test'
+        script: |
+          sudo safaridriver --enable
+          safaridriver --port=4444 &
+          flutter config --enable-web
+          flutter drive --target=test_driver/button_pressing.dart --browser-name safari --release
