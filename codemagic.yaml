@@ -15,6 +15,6 @@ workflows:
           source: true
     scripts:
       - chromedriver --port=4444 &
+      - flutter packages pub get
       - flutter config --enable-web
-        flutter packages pub get
-        flutter drive --target=test_driver/button_pressing.dart -d chrome --browser-name chrome --release
+      - flutter drive --target=test_driver/button_pressing.dart -d chrome --browser-name chrome --release
