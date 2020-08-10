@@ -13,6 +13,9 @@ workflows:
         - pattern: 'with_drive_tests'
           include: true
           source: true
+    cache:
+      cache_paths:
+        - build/web
     scripts:
         - flutter packages pub get
         - name: 'Flutter drive web test'
