@@ -18,8 +18,9 @@ workflows:
         - $FCI_BUILD_DIR/build/web
     scripts:
         - flutter packages pub get
+        - flutter config --enable-web
+        - flutter build web --release
         - name: 'Flutter drive web test'
           script: |
             chromedriver --port=4444 &
-            flutter config --enable-web
             flutter drive --target=test_driver/button_pressing.dart -d chrome --browser-name chrome --release --no-build
