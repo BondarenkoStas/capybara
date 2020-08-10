@@ -5,53 +5,19 @@ workflows:
   default-workflow:
     name: Default Workflow
     environment:
-      flutter: stable
-      xcode: latest
-      cocoapods: default
+      flutter: beta
     triggering:
       events:
         - push
       branch_patterns:
-        - pattern: 'master'
+        - pattern: 'with_drive_tests'
           include: true
           source: true
     scripts:
+      - | 
+        brew cask install chromedriver
+        ./chromedriver --port=4444 &
       - |
-        # set up debug keystore
-        rm -f ~/.android/debug.keystore
-        keytool -genkeypair \
-          -alias androiddebugkey \
-          -keypass android \
-          -keystore ~/.android/debug.keystore \
-          -storepass android \
-          -dname 'CN=Android Debug,O=Android,C=US' \
-          -keyalg 'RSA' \
-          -keysize 2048 \
-          -validity 10000
-      - |
-        echo "bla bla" > blafile
-        zip blafile.zip blafile
-        # set up local properties
-        echo "flutter.sdk=$HOME/programs/flutter" > "$FCI_BUILD_DIR/android/local.properties"
-      - flutter packages pub get
-      - flutter build appbundle --debug
-      - |
-        # generate universal apk signed with debug key
-        universal-apk generate \
-          --ks ~/.android/debug.keystore \
-          --ks-pass android \
-          --ks-key-alias androiddebugkey \
-          --key-pass android \
-          --pattern 'build/**/outputs/**/*.aab'
-    artifacts:
-      - blafile.zip
-      - build/**/outputs/**/*.apk
-      - build/**/outputs/**/*.aab
-      - build/**/outputs/**/mapping.txt
-      - flutter_drive.log
-    publishing:
-      email:
-        recipients:
-          - stanislav@nevercode.io
-      slack:
-        channel: '#dev-slack-publishing-test'
+        flutter config --enable-web
+        flutter packages pub get
+        flutter drive --target=test_driver/button_pressing.dart -d chrome --browser-name chrome --release
