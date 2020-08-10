@@ -14,10 +14,7 @@ workflows:
           include: true
           source: true
     scripts:
-      - | 
-        brew cask install chromedriver
-        ./chromedriver --port=4444 &
-      - |
-        flutter config --enable-web
+      - chromedriver --port=4444 &
+      - flutter config --enable-web
         flutter packages pub get
         flutter drive --target=test_driver/button_pressing.dart -d chrome --browser-name chrome --release
