@@ -10,11 +10,13 @@ workflows:
       events:
         - push
       branch_patterns:
-        - pattern: 'with_drive_tests'
+        - pattern: 'with_drive_tests_safari'
           include: true
           source: true
     scripts:
-      - chromedriver --port=4444 &
       - flutter packages pub get
+      - |
+        safaridriver --enable
+        safaridriver --port 4444 &
       - flutter config --enable-web
-      - flutter drive --target=test_driver/button_pressing.dart -d chrome --browser-name chrome --release
+      - flutter drive --target=test_driver/button_pressing.dart --browser-name safari --release
