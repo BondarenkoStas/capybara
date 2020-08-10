@@ -22,4 +22,4 @@ workflows:
           script: |
             chromedriver --port=4444 &
             flutter config --enable-web
-            flutter drive --target=test_driver/button_pressing.dart -d chrome --browser-name chrome --release
+            flutter drive --target=test_driver/button_pressing.dart -d chrome --browser-name chrome --release --no-build
