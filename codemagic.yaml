@@ -16,7 +16,7 @@ workflows:
     scripts:
       - flutter packages pub get
       - |
-        defaults write com.apple.Safari AllowRemoteAutomation 1
+        sudo safaridriver --enable
         safaridriver --port 4444 &
       - flutter config --enable-web
       - flutter drive --target=test_driver/button_pressing.dart --browser-name safari --release
