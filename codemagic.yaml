@@ -15,7 +15,7 @@ workflows:
           source: true
     cache:
       cache_paths:
-        - build/web
+        - $FCI_BUILD_DIR/build/web
     scripts:
         - flutter packages pub get
         - name: 'Flutter drive web test'
