@@ -1,31 +1,28 @@
-# Automatically generated on 2020-04-29 UTC from https://staging.codemagic.io/app/5c80df6467038200016d45e8/settings
-# Note that this configuration is not an exact match to UI settings. Review and adjust as necessary.
-
-workflows:
-  default-workflow:
-    name: Default Workflow
-    triggering:
-      events:
+--- 
+workflows: 
+  default-workflow: 
+    name: "Default Workflow"
+    triggering:       
+      events: 
         - push
-      branch_patterns:
-        - pattern: 'webhook'
-          include: true
-          source: true
-    scripts:
-      - | echo $FCI_COMMIT
-      - | echo $FCI_PROJECT_ID
-      - | echo $FCI_BUILD_ID
+      branch_patterns: 
+        - include: true
+          pattern: webhook
+    scripts: 
+      - "echo $FCI_COMMIT"
+      - "echo $FCI_PROJECT_ID"
+      - "echo $FCI_BUILD_ID"
       - |
         curl https://postman-echo.com/post \
           --header "Content-Type: application/json" \
           --request POST \
           --data @- <<REQUEST_BODY
             {
-                "project": {
-                    "id": "project_id",
-                    "name": "Codemagic",
-                    "platform": "Android",
-                    "web_url": "https://api.codemagic.io/apps/$FCI_PROJECT_ID"
-                },
+              "project": {
+                "id": "project_id",
+                "name": "Codemagic",
+                "platform": "Android",
+                "web_url": "https://api.codemagic.io/apps/$FCI_PROJECT_ID"
+              },
             }
             REQUEST_BODY
