@@ -1,4 +1,3 @@
---- 
 workflows: 
   default-workflow: 
     name: "Default Workflow"
@@ -8,10 +7,7 @@ workflows:
       branch_patterns: 
         - include: true
           pattern: webhook
-    scripts: 
-      - "echo $FCI_COMMIT"
-      - "echo $FCI_PROJECT_ID"
-      - "echo $FCI_BUILD_ID"
+    scripts:
       - |
         curl https://postman-echo.com/post \
           --header "Content-Type: application/json" \
@@ -20,9 +16,20 @@ workflows:
             {
               "project": {
                 "id": "project_id",
-                "name": "Codemagic",
-                "platform": "Android",
+                "name": "Lingvist Android",
+                "platform": "android",
+                "repository": "repo",
                 "web_url": "https://api.codemagic.io/apps/$FCI_PROJECT_ID"
               },
+              "build_config": {
+                "id": "build_config_id",
+                "branch": "$FCI_BRANCH",
+              },
+              "build": {
+                "id": "build_id",
+                "build_number": "$BUILD_NUMBER",
+                "commit_hash": "$FCI_COMMIT",
+                "web_url": "https://codemagic.io/app/$FCI_PROJECT_ID/build/$FCI_BUILD_ID"
+              }
             }
             REQUEST_BODY
