@@ -4,46 +4,28 @@
 workflows:
   default-workflow:
     name: Default Workflow
-    environment:
-      flutter: stable
-      xcode: latest
-      cocoapods: default
     triggering:
       events:
         - push
       branch_patterns:
-        - pattern: 'master'
+        - pattern: 'webhook'
           include: true
           source: true
     scripts:
+      - | echo $FCI_COMMIT
+      - | echo $FCI_PROJECT_ID
+      - | echo $FCI_BUILD_ID
       - |
-        # set up debug keystore
-        rm -f ~/.android/debug.keystore
-        keytool -genkeypair \
-          -alias androiddebugkey \
-          -keypass android \
-          -keystore ~/.android/debug.keystore \
-          -storepass android \
-          -dname 'CN=Android Debug,O=Android,C=US' \
-          -keyalg 'RSA' \
-          -keysize 2048 \
-          -validity 10000
-      - |
-        # set up local properties
-        echo "flutter.sdk=$HOME/programs/flutter" > "$FCI_BUILD_DIR/android/local.properties"
-      - flutter packages pub get
-      - flutter build appbundle --debug
-      - |
-        # generate universal apk signed with debug key
-        universal-apk generate \
-          --ks ~/.android/debug.keystore \
-          --ks-pass android \
-          --ks-key-alias androiddebugkey \
-          --key-pass android \
-          --pattern 'build/**/outputs/**/*.aab'
-    artifacts:
-      - blafile.zip
-      - build/**/outputs/**/*.apk
-      - build/**/outputs/**/*.aab
-      - build/**/outputs/**/mapping.txt
-      - flutter_drive.log
+        curl https://postman-echo.com/post \
+          --header "Content-Type: application/json" \
+          --request POST \
+          --data @- <<REQUEST_BODY
+            {
+                "project": {
+                    "id": "project_id",
+                    "name": "Codemagic",
+                    "platform": "Android",
+                    "web_url": "https://api.codemagic.io/apps/$FCI_PROJECT_ID"
+                },
+            }
+            REQUEST_BODY
