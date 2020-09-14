@@ -34,19 +34,21 @@ workflows:
           --key-pass android \
           --pattern 'build/**/outputs/**/*.aab'
     publishing:
-      scripts: |
-        curl https://postman-echo.com/post \
-          --header "Content-Type: application/json" \
-          --request POST \
-          --data @- <<REQUEST_BODY
-            {
-              "project": $FCI_PROJECT_ID,
-              "build": $FCI_BUILD_ID,
-              "branch": $FCI_BRANCH,
-              "hash": $FCI_COMMIT,
-              "commit_subject": $(git show -s --format=%s) ,
-              "commit_body": $(git show -s --format=%b), 
-              "build_number": $BUILD_NUMBER,
-              "artefacts": $FCI_ARTIFACT_LINKS,
-            }
-            REQUEST_BODY
+      scripts: 
+        - name: Webhook notification
+          script: |
+            curl -o https://postman-echo.com/post \
+              --header "Content-Type: application/json" \
+              --request POST \
+              --data @- <<REQUEST_BODY
+                {
+                  "project": $FCI_PROJECT_ID,
+                  "build": $FCI_BUILD_ID,
+                  "branch": $FCI_BRANCH,
+                  "hash": $FCI_COMMIT,
+                  "commit_subject": $(git show -s --format=%s) ,
+                  "commit_body": $(git show -s --format=%b), 
+                  "build_number": $BUILD_NUMBER,
+                  "artefacts": $FCI_ARTIFACT_LINKS,
+                }
+                REQUEST_BODY
