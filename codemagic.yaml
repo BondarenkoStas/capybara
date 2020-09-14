@@ -4,17 +4,6 @@
 workflows:
   default-workflow:
     name: Default Workflow
-    environment:
-      flutter: stable
-      xcode: latest
-      cocoapods: default
-    triggering:
-      events:
-        - push
-      branch_patterns:
-        - pattern: 'release_notes'
-          include: true
-          source: true
     scripts:
       - echo "bla" > bla.zip
       - name: Export changelog
