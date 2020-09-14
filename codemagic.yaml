@@ -16,6 +16,7 @@ workflows:
           include: true
           source: true
     scripts:
+      - echo "bla"
       - name: Export changelog
         script: |
           if [[ -z ${FCI_PREVIOUS_COMMIT} ]]
