@@ -26,7 +26,8 @@ workflows:
           fi
     publishing:
       email:
-        recipients: bondarenko.stanislav.96@gmail.com
+        recipients: 
+          - bondarenko.stanislav.96@gmail.com
     artifacts:
       - blafile.zip
       - build/**/outputs/**/*.apk
