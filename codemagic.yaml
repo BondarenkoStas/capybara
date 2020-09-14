@@ -31,3 +31,4 @@ workflows:
           - bondarenko.stanislav.96@gmail.com
     artifacts:
       - bla.zip
+      - release_notes.txt
