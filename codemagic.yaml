@@ -16,7 +16,7 @@ workflows:
           include: true
           source: true
     scripts:
-      - echo "bla"
+      - echo "bla" > bla
       - name: Export changelog
         script: |
           if [[ -z ${FCI_PREVIOUS_COMMIT} ]]
@@ -30,8 +30,4 @@ workflows:
         recipients: 
           - bondarenko.stanislav.96@gmail.com
     artifacts:
-      - blafile.zip
-      - build/**/outputs/**/*.apk
-      - build/**/outputs/**/*.aab
-      - build/**/outputs/**/mapping.txt
-      - flutter_drive.log
+      - bla
