@@ -18,6 +18,8 @@ workflows:
       email:
         recipients: 
           - bondarenko.stanislav.96@gmail.com
+      slack:
+        channel: #dev-slack-publishing-test
     artifacts:
       - bla.zip
       - release_notes.txt
