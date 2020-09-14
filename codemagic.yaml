@@ -22,7 +22,7 @@ workflows:
           then
             echo "No finished builds found to generate changelog
           else
-            echo $(git-changelog generate --previous-commit $(FCI_PREVIOUS_COMMIT)) | tee 'release_notes.txt'
+            echo "$(git-changelog generate --previous-commit $(FCI_PREVIOUS_COMMIT))" | tee 'release_notes.txt'
           fi
     publishing:
       email:
