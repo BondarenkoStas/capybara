@@ -16,7 +16,7 @@ workflows:
           include: true
           source: true
     scripts:
-      - echo "bla" > bla
+      - echo "bla" > bla.zip
       - name: Export changelog
         script: |
           if [[ -z ${FCI_PREVIOUS_COMMIT} ]]
@@ -30,4 +30,4 @@ workflows:
         recipients: 
           - bondarenko.stanislav.96@gmail.com
     artifacts:
-      - bla
+      - bla.zip
