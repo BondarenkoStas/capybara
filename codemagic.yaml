@@ -21,3 +21,4 @@ workflows:
     artifacts:
       - bla.zip
       - release_notes.txt
+      
