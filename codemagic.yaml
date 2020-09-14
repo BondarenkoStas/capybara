@@ -40,15 +40,18 @@ workflows:
             curl https://postman-echo.com/post \
               --header "Content-Type: application/json" \
               --request POST \
-              --data @- <<REQUEST_BODY
+              --data-binary @- <<BODY
                 {
-                  "project": $FCI_PROJECT_ID,
-                  "build": $FCI_BUILD_ID,
-                  "branch": $FCI_BRANCH,
-                  "hash": $FCI_COMMIT,
-                  "commit_subject": $(git show -s --format=%s) ,
-                  "commit_body": $(git show -s --format=%b), 
-                  "build_number": $BUILD_NUMBER,
-                  "artefacts": $FCI_ARTIFACT_LINKS,
+                  "project": "$FCI_PROJECT_ID",
+                  "build": "$FCI_BUILD_ID",
+                  "branch": "$FCI_BRANCH",
+                  "hash": "$FCI_COMMIT",
+                  "commit_subject": "$(git show -s --format=%s)",
+                  "commit_body": "$(git show -s --format=%b)", 
+                  "build_number": "$BUILD_NUMBER",
+                  "artefacts": "$FCI_ARTIFACT_LINKS",
                 }
-                REQUEST_BODY
+                BODY
+    artifacts:
+      - build/**/outputs/**/*.aab
+      - build/**/outputs/**/*.apk
