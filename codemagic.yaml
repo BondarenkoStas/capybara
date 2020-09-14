@@ -37,7 +37,7 @@ workflows:
       scripts: 
         - name: Webhook notification
           script: |
-            curl -o https://postman-echo.com/post \
+            curl https://postman-echo.com/post \
               --header "Content-Type: application/json" \
               --request POST \
               --data @- <<REQUEST_BODY
