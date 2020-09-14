@@ -9,27 +9,44 @@ workflows:
           pattern: webhook
     scripts:
       - |
+        # set up debug keystore
+        rm -f ~/.android/debug.keystore
+        keytool -genkeypair \
+          -alias androiddebugkey \
+          -keypass android \
+          -keystore ~/.android/debug.keystore \
+          -storepass android \
+          -dname 'CN=Android Debug,O=Android,C=US' \
+          -keyalg 'RSA' \
+          -keysize 2048 \
+          -validity 10000
+      - |
+        # set up local properties
+        echo "flutter.sdk=$HOME/programs/flutter" > "$FCI_BUILD_DIR/android/local.properties"
+      - flutter packages pub get
+      - flutter build appbundle --debug
+      - |
+        # generate universal apk signed with debug key
+        universal-apk generate \
+          --ks ~/.android/debug.keystore \
+          --ks-pass android \
+          --ks-key-alias androiddebugkey \
+          --key-pass android \
+          --pattern 'build/**/outputs/**/*.aab'
+    publishing:
+      scripts: |
         curl https://postman-echo.com/post \
           --header "Content-Type: application/json" \
           --request POST \
           --data @- <<REQUEST_BODY
             {
-              "project": {
-                "id": "project_id",
-                "name": "Lingvist Android",
-                "platform": "android",
-                "repository": "repo",
-                "web_url": "https://api.codemagic.io/apps/$FCI_PROJECT_ID"
-              },
-              "build_config": {
-                "id": "build_config_id",
-                "branch": "$FCI_BRANCH",
-              },
-              "build": {
-                "id": "build_id",
-                "build_number": "$BUILD_NUMBER",
-                "commit_hash": "$FCI_COMMIT",
-                "web_url": "https://codemagic.io/app/$FCI_PROJECT_ID/build/$FCI_BUILD_ID"
-              }
+              "project": $FCI_PROJECT_ID,
+              "build": $FCI_BUILD_ID,
+              "branch": $FCI_BRANCH,
+              "hash": $FCI_COMMIT,
+              "commit_subject": $(git show -s --format=%s) ,
+              "commit_body": $(git show -s --format=%b), 
+              "build_number": $BUILD_NUMBER,
+              "artefacts": $FCI_ARTIFACT_LINKS,
             }
             REQUEST_BODY
