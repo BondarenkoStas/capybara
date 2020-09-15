@@ -4,6 +4,9 @@
 workflows:
   default-workflow:
     name: Default Workflow
+    environment:
+      vars:
+        BC: $(FCI_BUILD_DIR)
     triggering:
       events:
         - push
@@ -12,7 +15,4 @@ workflows:
           include: true
           source: true
     scripts:
-      - |
-        echo "try export"
-        export a=10
-      - echo $a
+      - echo $BC
