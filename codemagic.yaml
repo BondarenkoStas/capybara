@@ -15,16 +15,6 @@ workflows:
       - |
         echo "echo export BC_DIR=$FCI_BUILD_DIR" >> ~/.bash_profile
         source ~/.bash_profile
+      - cat ~/.bash_profile
       - |
         echo $BC_DIR
-      - |
-        echo "echo export BC_DIR2=$FCI_BUILD_DIR" >> ~/.bash_profile
-      - |
-        source ~/.bash_profile
-        echo $BC_DIR2
-      - |
-        echo "echo export BC_DIR3=$FCI_BUILD_DIR" >> ~/.bash_profile
-        source ~/.bash_profile
-      - |
-        source ~/.bash_profile
-        echo $BC_DIR3
