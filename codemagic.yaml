@@ -13,6 +13,7 @@ workflows:
           source: true
     scripts:
       - |
+        export aa="rerere"
         echo "export BC_DIR=$FCI_BUILD_DIR" >> ~/.bash_profile
       - cat ~/.bash_profile
       - |
