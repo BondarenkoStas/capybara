@@ -4,9 +4,6 @@
 workflows:
   default-workflow:
     name: Default Workflow
-    environment:
-      vars:
-        myvar: $FCI_BUILD_DIR
     triggering:
       events:
         - push
@@ -15,8 +12,5 @@ workflows:
           include: true
           source: true
     scripts:
-      - echo $myvar
       - echo "export BC_DIR=$FCI_BUILD_DIR" >> ~/.bash_profile
-      - |
-        source ~/.bash_profile
-        echo $BC_DIR
+      - echo $BC_DIR
