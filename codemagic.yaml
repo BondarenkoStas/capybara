@@ -37,19 +37,34 @@ workflows:
       scripts: 
         - name: Webhook notification
           script: |
+            export PROJECT_URL=https://codemagic.io/app/${FCI_PROJECT_ID}
+            # export VERSION_CODE=$(grep -o "versionCode\s\+\d\+" app/build.gradle | awk '{ print $2 }')
+            # export VERSION_NAME=$(awk '/versionName\s".*"/{ print $2 }' app/build.gradle | tr -d \''"\')
+
             curl https://postman-echo.com/post \
               --header "Content-Type: application/json" \
               --request POST \
-              --data-binary @- <<BODY
+              --data @- <<BODY
                 {
-                  "project": "$FCI_PROJECT_ID",
-                  "build": "$FCI_BUILD_ID",
-                  "branch": "$FCI_BRANCH",
-                  "hash": "$FCI_COMMIT",
-                  "commit_subject": "$(git show -s --format=%s)",
-                  "commit_body": "$(git show -s --format=%b)", 
-                  "build_number": "$BUILD_NUMBER",
-                  "artefacts": "$FCI_ARTIFACT_LINKS",
+                  "project": {
+                    "name": "Lingvist Android",
+                    "id": "$FCI_PROJECT_ID",
+                    "url": "$PROJECT_URL",
+                  },
+                  "build": {
+                    "id": "$FCI_BUILD_ID",
+                    "branch": "$FCI_BRANCH",
+                    "number": "$BUILD_NUMBER",
+                    "version_code": "$VERSION_CODE",
+                    "version_name": "$VERSION_NAME",
+                    "url": "${PROJECT_URL}/build/${FCI_BUILD_ID}"
+                  },
+                  "commit": {
+                    "hash": "$FCI_COMMIT",
+                    "commit_subject": "$(git show -s --format=%s)",
+                    "commit_body": "$(git show -s --format=%b)"
+                  }
+                  "artefacts": "$FCI_ARTIFACT_LINKS"
                 }
                 BODY
     artifacts:
