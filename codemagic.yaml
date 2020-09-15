@@ -17,5 +17,6 @@ workflows:
         echo "export BC_DIR=$FCI_BUILD_DIR" >> ~/.bash_profile
       - cat ~/.bash_profile
       - |
+        cat ~/.bash_profile
         source ~/.bash_profile
         echo $BC_DIR
