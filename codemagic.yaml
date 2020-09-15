@@ -13,4 +13,6 @@ workflows:
           source: true
     scripts:
       - echo "export BC_DIR=$FCI_BUILD_DIR" >> ~/.bash_profile
-      - echo $BC_DIR
+      - |
+        source ~/.bash_profile
+        echo $BC_DIR
