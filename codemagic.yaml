@@ -18,5 +18,5 @@ workflows:
         echo $MY_VAR
       - |
         export NEVERCODE_BRANCH="qa"
-        ./script.sh
+        chmod +x script.sh && ./script.sh
       - cd android && cat ffile
