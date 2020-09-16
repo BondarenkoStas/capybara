@@ -12,5 +12,7 @@ workflows:
           include: true
           source: true
     scripts:
-      - echo "export MY_VAR=$FCI_BUILD_DIR" >> ~/.bashrc
-      - echo $MY_VAR
+      - echo "export MY_VAR=$FCI_BUILD_DIR" >> migration_variables
+      - |
+        source migration_variables
+        echo $MY_VAR
