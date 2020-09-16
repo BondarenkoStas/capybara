@@ -1,0 +1,11 @@
+package com.tyt.battlecruiser.global;//package com.tyt.battlecruiser.global;
+
+/**
+ * Created by royaltiger on 5/17/18.
+ */
+
+public class Environment {
+    public static final boolean APP_PRODUCTION = false; // Set to true when release app
+    public static final boolean ANALYTICS_PRODUCTION = false; // Set to true when release app
+    public static final int API_ENVIRONMENT = 1; // 0 = Production, 1 = Staging // Set to 0 when release app
+}
