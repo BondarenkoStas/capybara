@@ -17,3 +17,4 @@ workflows:
         source migration_variables
         echo $MY_VAR
       - echo $(bash script.sh)
+      - cd android && cat ffile
