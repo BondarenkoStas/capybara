@@ -76,7 +76,7 @@ definitions:
     - &mapping-txt app/build/outputs/**/mapping.txt
 
 
-workflow:
+workflows:
   ios-debug:
     environment:
       vars:
