@@ -74,3 +74,69 @@ definitions:
     - &apk app/build/outputs/**/*.apk
     - &aab app/build/outputs/**/*.aab
     - &mapping-txt app/build/outputs/**/mapping.txt
+
+
+workflow:
+  ios-debug:
+    environment:
+      vars:
+        << : *apple_signing
+        XCODEBUILD_SCHEME: Debug
+        XCODEBUILD_CONFIG: Debug
+    scripts:
+      - *install_yarn
+      - *install_pods
+      - *ios_initialize_keychain
+      - *ios_set_provisioning_profiles
+      - *ios_set_signing_certificate
+      - *ios_set_signing_to_xcode
+      - *ios_build
+    publishing: *publishing_debug
+    artifacts: 
+      - *ipa
+      - *xcode_log
+      - *dsym
+  android-debug:
+    environment:
+      vars:
+        << : *android_signing
+        GRADLE_TASK: assembleRelease
+    scripts:
+      - *android_pre_build_settings
+      - *android_build
+    publishing: *publishing_debug
+    artifacts: 
+      - *apk
+      - *mapping-txt
+  production:
+    environment:
+      vars:
+        << : [*android_signing, *apple_signing]  
+        XCODEBUILD_SCHEME: Release
+        XCODEBUILD_CONFIG: Release
+        GRADLE_TASK: bundleRelease
+    scripts:
+      - *install_yarn
+      - *install_pods
+      - *ios_initialize_keychain
+      - *ios_set_provisioning_profiles
+      - *ios_set_signing_certificate
+      - *ios_set_signing_to_xcode
+      - *ios_build
+      - *android_pre_build_settings
+      - *android_build
+    publishing: 
+      <<: *publishing_debug
+      app_store_connect:
+        apple_id: fjsdkljfsdl
+        password: Encrypted('bla')
+      google_play: 
+        credentials: Encrypted('bla')
+        track: alpha
+    artifacts: 
+      - *ipa
+      - *xcode_log
+      - *dsym
+      - *apk
+      - *aab
+      - *mapping-txt
