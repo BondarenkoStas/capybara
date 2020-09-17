@@ -1,22 +1,76 @@
-# Automatically generated on 2020-04-29 UTC from https://staging.codemagic.io/app/5c80df6467038200016d45e8/settings
-# Note that this configuration is not an exact match to UI settings. Review and adjust as necessary.
-
-workflows:
-  default-workflow:
-    name: Default Workflow
-    triggering:
-      events:
-        - push
-      branch_patterns:
-        - pattern: 'try'
-          include: true
-          source: true
-    scripts:
-      - echo "export MY_VAR=$FCI_BUILD_DIR" >> migration_variables
-      - |
-        source migration_variables
-        echo $MY_VAR
-      - |
-        export NEVERCODE_BRANCH="qa"
-        chmod +x script.sh && ./script.sh
-      - cd android && cat ffile
+definitions:
+  environment:
+    apple_signing: &apple_signing
+      CM_CERTIFICATE: Encrypted('bla')
+      CM_PROVISIONING_PROFILE: Encrypted('bla')
+    android_signing: &android_signing
+      CM_KEYSTORE: Encrypted('bla')
+      CM_KEYSTORE_PATH: '/tmp/keystore.keystore'
+      CM_KEYSTORE_PASSWORD: Encrypted('bla')
+      CM_KEY_ALIAS_PASSWORD: Encrypted('bla')
+      CM_KEY_ALIAS_USERNAME: bla
+  scripts:   
+    - &install_yarn
+      name: Install dependencies install
+      script: yarn
+    - &install_pods
+      name: Install pods
+      script: find . -name "Podfile" -execdir pod repo update \; -a -execdir pod install \;
+    - &ios_initialize_keychain
+      name: Set up keychain to be used for codesigning using Codemagic CLI 'keychain' command
+      script: |
+        keychain initialize
+    - &ios_set_provisioning_profiles
+      name: Set up Provisioning profiles from environment variables
+      script: |
+        PROFILES_HOME="$HOME/Library/MobileDevice/Provisioning Profiles"
+        mkdir -p "$PROFILES_HOME"
+        PROFILE_PATH="$(mktemp "$PROFILES_HOME"/$(uuidgen).mobileprovision)"
+        echo ${CM_PROVISIONING_PROFILE} | base64 --decode > $PROFILE_PATH
+        echo "Saved provisioning profile $PROFILE_PATH"
+    - &ios_set_signing_certificate
+      name: Set up signing certificate
+      script: |
+        echo $CM_CERTIFICATE | base64 --decode > /tmp/certificate.p12
+        keychain add-certificates --certificate /tmp/certificate.p12
+    - &ios_set_signing_to_xcode
+      name: Set up code signing settings on Xcode project
+      script: |
+        xcode-project use-profiles
+    - &ios_build
+      name: Build ipa
+      script: |
+        xcode-project build-ipa \
+          --workspace Avios/BAExec.xcworkspace \
+          --scheme $XCODEBUILD_SCHEME \
+          --config $XCODEBUILD_CONFIG
+    - &android_pre_build_settings
+      name: Set up local properties
+      script: |
+        echo "sdk.dir=$HOME/programs/android-sdk-macosx" > "$FCI_BUILD_DIR/local.properties"
+        echo $CM_KEYSTORE | base64 --decode > $CM_KEYSTORE_PATH
+    - &android_build
+      name: Build Android
+      script: ./gradlew $GRADLE_TASK
+    - &android_generate_universal_apk
+      name: Generate universal APK
+      script: |
+        android-app-bundle build-universal-apk \
+          --bundle app/build/outputs/bundle/**/*.aab \
+          --ks $CM_KEYSTORE_PATH \
+          --ks-pass $CM_KEYSTORE_PASSWORD \
+          --ks-key-alias $CM_KEY_ALIAS_USERNAME \
+          --key-pass $CM_KEY_ALIAS_PASSWORD
+  publishing-debug: &publishing_debug
+    email:
+      recipients:
+        - example@example.com
+    slack:
+      channel: '#some_channel'
+  artifacts: &artifacts_ios
+    - &ipa build/ios/ipa/*.ipa
+    - &xcode_log /tmp/xcodebuild_logs/*.log
+    - &dsym $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
+    - &apk app/build/outputs/**/*.apk
+    - &aab app/build/outputs/**/*.aab
+    - &mapping-txt app/build/outputs/**/mapping.txt
