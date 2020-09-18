@@ -9,4 +9,4 @@ workflows:
       scripts:
         - echo $FCI_BUILD_STATUS
     artifacts:
-      a.txt
+      - a.txt
