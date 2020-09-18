@@ -2,11 +2,9 @@ workflows:
   def:
     name: def
     scripts:
-      - echo $FCI_BUILD_STATUS
       - echo "bla" > a.txt
-      - cd jkljljk
     publishing:
       scripts:
-        - echo $FCI_BUILD_STATUS
+        - echo $FCI_ARTIFACT_LINKS
     artifacts:
       - a.txt
