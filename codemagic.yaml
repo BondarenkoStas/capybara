@@ -4,6 +4,16 @@ workflows:
     scripts:
       - echo "bla" > a.txt
     publishing:
+      email:
+        notify_on_failed_builds_only: true
+        recipients:
+          - bondarenko.stanislav.96@gmail.com
+      slack:
+        notify_on_build_start: true
+        channel: '#dev-slack-publishing-test'
+      github_releases:
+        artifact_patterns:
+          - a.txt
       scripts:
         - echo $FCI_ARTIFACT_LINKS
     artifacts:
