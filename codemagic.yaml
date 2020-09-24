@@ -5,7 +5,7 @@ workflows:
       - echo "bla" > a.txt
     publishing:
       email:
-        notify_on_failed_builds_only: true
+#         notify_on_failed_builds_only: true
         recipients:
           - bondarenko.stanislav.96@gmail.com
       slack:
