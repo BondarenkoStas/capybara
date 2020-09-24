@@ -7,7 +7,7 @@ workflows:
       email:
 #         notify_on_failed_builds_only: true
         recipients:
-          - bondarenko.stanislav.96@gmail.com
+          - stanislav@nevercode.io
       slack:
         notify_on_build_start: true
         channel: '#dev-slack-publishing-test'
