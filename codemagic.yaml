@@ -26,4 +26,4 @@ workflows:
         apple_id: myemail@gmail.com
         password: abcde
     artifacts:
-      - *.ipa
+      - '*.ipa'
