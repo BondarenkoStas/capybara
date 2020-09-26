@@ -14,12 +14,11 @@ workflows:
     scripts:
       - name: Download artifacts from build 5f6dfeb029657a3ca6977423
         script: |
-          brew install jq
-          curl \
+          curl -s --request GET \
             -H "Content-Type: application/json" \
             -H "x-auth-token: 4nh2gDBK62WJ5QPl0SStBw" \
-            --request GET https://api.codemagic.io/builds/5f6dfeb029657a3ca6977423 | \
-            jq -r '.build."artefacts" | .[] | .url' | \
+            https://api.codemagic.io/builds/5f6dfeb029657a3ca6977423 | \
+            python3 -c "import sys, json; print('\n'.join([artifact['url'] for artifact in json.load(sys.stdin)['build']['artefacts']]))" | \
             xargs wget -i {}
     publishing:
       app_store_connect:
