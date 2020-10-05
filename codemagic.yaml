@@ -19,7 +19,7 @@ workflows:
       - echo "export RELEASE_NOTES=\"$(git-changelog generate --previous-commit $FCI_PREVIOUS_COMMIT)\"" > ~/envvars.sh
       - |
         source ~/envvars.sh
-        echo $RELEASE_NOTES   
+        echo $RELEASE_NOTES  
       - git-changelog generate --previous-commit $FCI_PREVIOUS_COMMIT
       - echo "$(git-changelog generate --previous-commit $FCI_PREVIOUS_COMMIT)" > my_release_notes
       - cat my_release_notes 
