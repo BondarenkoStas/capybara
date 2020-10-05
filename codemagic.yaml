@@ -17,12 +17,12 @@ workflows:
           export RELEASE_NOTES=$(git-changelog generate --previous-commit $FCI_PREVIOUS_COMMIT)
           echo "******************"
           echo $RELEASE_NOTES
+#       - name: fff
+#         script: echo "export RELEASE_NOTES=$(git-changelog generate --previous-commit $FCI_PREVIOUS_COMMIT)" > ~/envvars.sh
       - name: fff
-        script: echo "export RELEASE_NOTES=$(git-changelog generate --previous-commit $FCI_PREVIOUS_COMMIT)" > ~/envvars.sh
+        script: echo "export RELEASE_NOTES=$(git-changelog generate --previous-commit $FCI_PREVIOUS_COMMIT)" > my_release_notes
       - name: fff2
-        script: |
-          source ~/envvars.sh
-          echo $RELEASE_NOTES 
+        script: cat my_release_notes 
 #     publishing:
 #       email:
 #         recipients: 
