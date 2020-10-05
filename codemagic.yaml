@@ -11,9 +11,8 @@ workflows:
         - pattern: 'release_notes'
           include: true
     scripts:
-      - echo "bla" > bla.zip
       - |
-        export RELEASE_NOTES=$(git-changelog generate --previous-commit ${FCI_PREVIOUS_COMMIT})
+        export RELEASE_NOTES="$(git-changelog generate --previous-commit ${FCI_PREVIOUS_COMMIT})"
         echo "******************"
         echo $RELEASE_NOTES
       - echo "export RELEASE_NOTES=\"$(git-changelog generate --previous-commit ${FCI_PREVIOUS_COMMIT})\"" > ~/envvars.sh
@@ -23,11 +22,3 @@ workflows:
       - git-changelog generate --previous-commit ${FCI_PREVIOUS_COMMIT}
       - echo "$(git-changelog generate --previous-commit ${FCI_PREVIOUS_COMMIT})" > my_release_notes
       - cat my_release_notes 
-#     publishing:
-#       email:
-#         recipients: 
-#           - bondarenko.stanislav.96@gmail.com
-    artifacts:
-      - bla.zip
-#       - release_notes.txt
-      
