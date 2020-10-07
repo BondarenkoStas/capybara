@@ -44,17 +44,13 @@ workflows:
           --pattern 'build/**/outputs/**/*.aab'
     publishing:
       email:
-        notify_on_failed_builds_only: true
         recipients:
           - stanislav@nevercode.io
       slack:
-        notify_on_build_start: true
         channel: '#dev-slack-publishing-test'
       github_releases:
         artifact_patterns:
           - build/**/outputs/**/*.apk
-      scripts:
-        - echo $FCI_ARTIFACT_LINKS 
     artifacts:
       - blafile.zip
       - build/**/outputs/**/*.apk
