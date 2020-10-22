@@ -8,6 +8,14 @@ workflows:
       flutter: stable
       xcode: latest
       cocoapods: default
+    triggering:
+      events:
+        - push
+        - pull_request
+      branch_patterns:
+        - pattern: '*'
+          include: true
+          source: true
     scripts:
       - |
         # set up debug keystore
@@ -26,21 +34,6 @@ workflows:
         echo "flutter.sdk=$HOME/programs/flutter" > "$FCI_BUILD_DIR/android/local.properties"
       - flutter packages pub get
       - flutter build appbundle --debug
-    publishing:
-      email:
-        recipients:
-          - stanislav@nevercode.io
-          - stanislav.bondarenko.96@gmail.com
-        notify:
-          success: false
-      slack:
-        notify_on_build_start: true
-        channel: '#dev-slack-publishing-test'
-      github_releases:
-        artifact_patterns:
-          - build/**/outputs/**/*.apk
-      scripts:
-        - echo $FCI_ARTIFACT_LINKS 
     artifacts:
       - blafile.zip
       - build/**/outputs/**/*.apk
