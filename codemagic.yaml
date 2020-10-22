@@ -5,6 +5,7 @@ workflows:
       flutter: stable
       xcode: latest
       cocoapods: default
+      xcode: 11.7
     triggering:
       events:
         - push
