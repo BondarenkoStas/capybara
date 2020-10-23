@@ -13,7 +13,7 @@ workflows:
         - push
         - tag
       branch_patterns:
-        - pattern: 'master'
+        - pattern: 'discord'
           include: true
           source: true
     scripts:
@@ -33,27 +33,18 @@ workflows:
         # set up local properties
         echo "flutter.sdk=$HOME/programs/flutter" > "$FCI_BUILD_DIR/android/local.properties"
       - flutter packages pub get
-      - flutter build appbundle --debug
-      - |
-        # generate universal apk signed with debug key
-        universal-apk generate \
-          --ks ~/.android/debug.keystore \
-          --ks-pass android \
-          --ks-key-alias androiddebugkey \
-          --key-pass android \
-          --pattern 'build/**/outputs/**/*.aab'
+      - flutter build apk --debug
     publishing:
-      email:
-        recipients:
-          - stanislav@nevercode.io
-      slack:
-        channel: '#dev-slack-publishing-test'
-      github_releases:
-        artifact_patterns:
-          - build/**/outputs/**/*.apk
+      scripts:
+        - name: Publish to Discord notification
+          script: |
+            DISCORD_WEBHOOK_URL=https://discordapp.com/api/webhooks/769114802114789406/vKmeUbq8VcWfas0MAMDtA0c5Ma_p5Qx0QC_kInemW03MzA9ScOGHtbqHo4OZ3Zfji66u
+            export PROJECT_URL=https://codemagic.io/app/${FCI_PROJECT_ID}
+            payload=\''{"content": "Build '$BUILD_NUMBER' for your project '$PROJECT_URL' has finished.\nBuild url '$PROJECT_URL'/build/'$FCI_BUILD_ID'.\nCommit hash: '$FCI_COMMIT', commit subject: '$(git show -s --format=%s)'"}'\'
+
+            curl $DISCORD_WEBHOOK_URL \
+              --header "Content-Type: application/json" \
+              --request POST \
+              --data "$payload"
     artifacts:
-      - blafile.zip
       - build/**/outputs/**/*.apk
-      - build/**/outputs/**/*.aab
-      - build/**/outputs/**/mapping.txt
-      - flutter_drive.log
