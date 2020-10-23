@@ -32,8 +32,8 @@ workflows:
       - |
         # set up local properties
         echo "flutter.sdk=$HOME/programs/flutter" > "$FCI_BUILD_DIR/android/local.properties"
-      - flutter packages pub get
-      - flutter build apk --debug
+#       - flutter packages pub get
+#       - flutter build apk --debug
     publishing:
       scripts:
         - name: Publish to Discord notification
@@ -46,5 +46,5 @@ workflows:
               --header "Content-Type: application/json" \
               --request POST \
               --data "$payload"
-    artifacts:
-      - build/**/outputs/**/*.apk
+#     artifacts:
+#       - build/**/outputs/**/*.apk
