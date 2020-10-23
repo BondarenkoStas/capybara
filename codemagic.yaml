@@ -40,11 +40,11 @@ workflows:
           script: |
             DISCORD_WEBHOOK_URL=https://discordapp.com/api/webhooks/769114802114789406/vKmeUbq8VcWfas0MAMDtA0c5Ma_p5Qx0QC_kInemW03MzA9ScOGHtbqHo4OZ3Zfji66u
             export PROJECT_URL=https://codemagic.io/app/${FCI_PROJECT_ID}
-            payload=\''{"content": "Build '$BUILD_NUMBER' for your project '$PROJECT_URL' has finished.\nBuild url '$PROJECT_URL'/build/'$FCI_BUILD_ID'.\nCommit hash: '$FCI_COMMIT', commit subject: '$(git show -s --format=%s)'"}'\'
+            payload='{"content": "Build '$BUILD_NUMBER' for your project '$PROJECT_URL' has finished.\nBuild url '$PROJECT_URL'/build/'$FCI_BUILD_ID'.\nCommit hash: '$FCI_COMMIT', commit subject: '$(git show -s --format=%s)'"}'
 
             curl $DISCORD_WEBHOOK_URL \
               --header "Content-Type: application/json" \
               --request POST \
-              --data "$payload"
+              --data $payload
 #     artifacts:
 #       - build/**/outputs/**/*.apk
