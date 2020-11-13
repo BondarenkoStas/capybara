@@ -43,14 +43,6 @@ workflows:
           --key-pass android \
           --pattern 'build/**/outputs/**/*.aab'
     publishing:
-<<<<<<< HEAD
-=======
-      email:
-        recipients:
-          - stanislav@nevercode.io
-      slack:
-        channel: '#dev-slack-publishing-test'
->>>>>>> 6f9399e915d58aa7ca329be528750b3c191d5d2c
       github_releases:
         artifact_patterns:
           - build/**/outputs/**/*.apk
