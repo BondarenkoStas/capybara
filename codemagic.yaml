@@ -17,36 +17,39 @@ workflows:
           include: true
           source: true
     scripts:
-      - |
-        # set up debug keystore
-        rm -f ~/.android/debug.keystore
-        keytool -genkeypair \
-          -alias androiddebugkey \
-          -keypass android \
-          -keystore ~/.android/debug.keystore \
-          -storepass android \
-          -dname 'CN=Android Debug,O=Android,C=US' \
-          -keyalg 'RSA' \
-          -keysize 2048 \
-          -validity 10000
-      - |
-        # set up local properties
-        echo "flutter.sdk=$HOME/programs/flutter" > "$FCI_BUILD_DIR/android/local.properties"
-      - flutter packages pub get
-      - flutter build appbundle --debug
-      - |
-        # generate universal apk signed with debug key
-        universal-apk generate \
-          --ks ~/.android/debug.keystore \
-          --ks-pass android \
-          --ks-key-alias androiddebugkey \
-          --key-pass android \
-          --pattern 'build/**/outputs/**/*.aab'
+      - echo "whatever" > whatever_file
+      # - |
+      #   # set up debug keystore
+      #   rm -f ~/.android/debug.keystore
+      #   keytool -genkeypair \
+      #     -alias androiddebugkey \
+      #     -keypass android \
+      #     -keystore ~/.android/debug.keystore \
+      #     -storepass android \
+      #     -dname 'CN=Android Debug,O=Android,C=US' \
+      #     -keyalg 'RSA' \
+      #     -keysize 2048 \
+      #     -validity 10000
+      # - |
+      #   # set up local properties
+      #   echo "flutter.sdk=$HOME/programs/flutter" > "$FCI_BUILD_DIR/android/local.properties"
+      # - flutter packages pub get
+      # - flutter build appbundle --debug
+      # - |
+      #   # generate universal apk signed with debug key
+      #   universal-apk generate \
+      #     --ks ~/.android/debug.keystore \
+      #     --ks-pass android \
+      #     --ks-key-alias androiddebugkey \
+      #     --key-pass android \
+      #     --pattern 'build/**/outputs/**/*.aab'
     publishing:
       github_releases:
         artifact_patterns:
-          - build/**/outputs/**/*.apk
+          # - build/**/outputs/**/*.apk
+          - whatever_file
     artifacts:
-      - build/**/outputs/**/*.apk
-      - build/**/outputs/**/*.aab
-      - build/**/outputs/**/mapping.txt
+      - whatever_file
+      # - build/**/outputs/**/*.apk
+      # - build/**/outputs/**/*.aab
+      # - build/**/outputs/**/mapping.txt
