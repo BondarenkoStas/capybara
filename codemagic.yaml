@@ -46,7 +46,7 @@ workflows:
     publishing:
       github_releases:
         artifact_patterns:
-          - build/**/outputs/**/*.apk
+          - '*.apk'
     artifacts:
       - build/**/outputs/**/*.apk
       - build/**/outputs/**/*.aab
