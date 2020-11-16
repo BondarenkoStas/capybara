@@ -17,7 +17,7 @@ workflows:
           include: true
           source: true
     scripts:
-      - echo "whatever" > whatever_file
+      - echo $FCI_TAG
       - |
         # set up debug keystore
         rm -f ~/.android/debug.keystore
