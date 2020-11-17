@@ -16,6 +16,9 @@ workflows:
         - pattern: 'master'
           include: true
           source: true
+    cache:
+      cache_paths:
+        - ~/.gradle/caches
     scripts:
       - echo $FCI_TAG
       - |
