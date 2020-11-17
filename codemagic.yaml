@@ -1,6 +1,7 @@
 # Automatically generated on 2020-04-29 UTC from https://staging.codemagic.io/app/5c80df6467038200016d45e8/settings
 # Note that this configuration is not an exact match to UI settings. Review and adjust as necessary.
 
+
 workflows:
   default-workflow:
     name: Default Workflow
