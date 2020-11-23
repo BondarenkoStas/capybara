@@ -14,9 +14,15 @@ workflows:
           include: true
           source: true
     scripts:
-      - |
-        is_project_changed=$(git diff --name-only --diff-filter=M @~..@ codemagic.yaml)
-        [ -z "$is_project_changed" ] && exit 0
+      - name: Check if project has changed
+        script: |
+          is_project_changed=$(git diff --name-only --diff-filter=M @~..@ 'codemagic.yaml')
+          if [ -z "$is_project_changed" ]; then
+            echo "Project was changed, continue build"
+          else
+            echo "Project didn't change, abort the build"
+            exit 1   
+          fi
       - |
         # set up debug keystore
         rm -f ~/.android/debug.keystore
