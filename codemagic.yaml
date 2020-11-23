@@ -5,10 +5,7 @@
 workflows:
   default-workflow:
     name: Default Workflow
-    environment:
-      flutter: stable
-      xcode: latest
-      cocoapods: default
+    max_build_duration: 600
     triggering:
       events:
         - push
@@ -17,11 +14,10 @@ workflows:
         - pattern: 'master'
           include: true
           source: true
-    cache:
-      cache_paths:
-        - ~/.gradle/caches
     scripts:
-      - echo $FCI_TAG
+      - |
+        is_project_changed=$(git diff --name-only --diff-filter=M @~..@ codemagic.yaml)
+        [ -z "$is_project_changed" ] && exit 0
       - |
         # set up debug keystore
         rm -f ~/.android/debug.keystore
@@ -47,10 +43,6 @@ workflows:
           --ks-key-alias androiddebugkey \
           --key-pass android \
           --pattern 'build/**/outputs/**/*.aab'
-    publishing:
-      github_releases:
-        artifact_patterns:
-          - '*.apk'
     artifacts:
       - build/**/outputs/**/*.apk
       - build/**/outputs/**/*.aab
