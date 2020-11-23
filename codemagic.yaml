@@ -19,9 +19,9 @@ workflows:
           is_project_changed=$(git diff --name-only --diff-filter=M @~..@ 'codemagic.yaml')
           if [ -z "$is_project_changed" ]; then
             echo "Project didn't change, abort the build"
+            exit 1
           else
             echo "Project was changed, continue build"
-            exit 1   
           fi
       - |
         # set up debug keystore
