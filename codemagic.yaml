@@ -5,7 +5,6 @@
 workflows:
   default-workflow:
     name: Default Workflow
-    max_build_duration: 600
     triggering:
       events:
         - push
