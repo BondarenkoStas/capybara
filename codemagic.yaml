@@ -1,7 +1,3 @@
-# Automatically generated on 2020-04-29 UTC from https://staging.codemagic.io/app/5c80df6467038200016d45e8/settings
-# Note that this configuration is not an exact match to UI settings. Review and adjust as necessary.
-
-
 workflows:
   default-workflow:
     name: Default Workflow
@@ -14,15 +10,6 @@ workflows:
           include: true
           source: true
     scripts:
-      - name: Check if project has changed
-        script: |
-          is_project_changed=$(git diff --name-only --diff-filter=M @~..@ 'codemagic.yaml')
-          if [ -z "$is_project_changed" ]; then
-            echo "Project didn't change, abort the build"
-            exit 1
-          else
-            echo "Project was changed, continue build"
-          fi
       - |
         # set up debug keystore
         rm -f ~/.android/debug.keystore
@@ -48,6 +35,24 @@ workflows:
           --ks-key-alias androiddebugkey \
           --key-pass android \
           --pattern 'build/**/outputs/**/*.aab'
+    publishing:
+      scripts:
+        - name: Start a new build with generated artifacts
+          script: |
+            APP_LINK=$(echo $FCI_ARTIFACT_LINKS | jq '.[] | select(.name | endswith(".apk")) | .url')
+
+            curl -H "Content-Type: application/json" -H "x-auth-token: 4nh2gDBK62WJ5QPl0SStBw" \
+              --data '{
+                  "appId": "5f2aaf2fc4bf2d001800d81b", 
+                  "workflowId": "default-workflow",
+                  "branch": "master", 
+                  "environment": { 
+                      "variables": { 
+                          "APP_TO_TEST_URL": $APP_LINK
+                      }
+                  }
+              }' \
+              https://api.codemagic.io/builds
     artifacts:
       - build/**/outputs/**/*.apk
       - build/**/outputs/**/*.aab
