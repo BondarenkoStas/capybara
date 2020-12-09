@@ -6,7 +6,7 @@ workflows:
         - push
         - tag
       branch_patterns:
-        - pattern: 'master'
+        - pattern: 'try_trigger_new_build'
           include: true
           source: true
     scripts:
@@ -48,7 +48,7 @@ workflows:
                   "branch": "master", 
                   "environment": { 
                       "variables": { 
-                          "APP_TO_TEST_URL": $APP_LINK
+                          "APP_TO_TEST_URL": '$APP_LINK'
                       }
                   }
               }' \
