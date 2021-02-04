@@ -8,8 +8,8 @@ workflows:
       events:
         - push
         - tag
-      branch_patterns:
-        - pattern: 'master'
+      branch: patterns:
+        - pattern: 'failing'
           include: true
           source: true
     scripts:
